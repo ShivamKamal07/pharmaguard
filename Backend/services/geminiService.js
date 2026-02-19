@@ -1,6 +1,4 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const axios = require("axios");
 
 async function generateExplanation({
   drug,
@@ -10,8 +8,6 @@ async function generateExplanation({
   detectedVariants
 }) {
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-
     const prompt = `
 You are a clinical pharmacogenomics expert.
 
@@ -22,26 +18,47 @@ Phenotype: ${phenotype}
 Risk Assessment: ${riskLabel}
 Detected Variants: ${JSON.stringify(detectedVariants)}
 
-Generate:
-1. A short clinical summary (2-3 sentences)
-2. Biological mechanism explanation
-3. List of cited variants (rsIDs only)
+Generate response strictly in JSON format:
 
-Respond in JSON format:
 {
-  "summary": "...",
-  "mechanism": "...",
+  "summary": "2-3 sentence clinical explanation",
+  "mechanism": "Biological mechanism explanation",
   "citations": ["rsXXXX"]
 }
 `;
 
-    const result = await model.generateContent(prompt);
-    const response = result.response.text();
+    const response = await axios.post(
+      "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent",
+      {
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.4 }
+      },
+      {
+        params: { key: process.env.GEMINI_API_KEY },
+        headers: { "Content-Type": "application/json" }
+      }
+    );
 
-    return JSON.parse(response);
+    const text =
+      response.data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+
+    const cleaned = text
+      .replace(/```json/g, "")
+      .replace(/```/g, "")
+      .trim();
+
+    try {
+      return JSON.parse(cleaned);
+    } catch {
+      return {
+        summary: cleaned,
+        mechanism: "AI response not in strict JSON format.",
+        citations: []
+      };
+    }
 
   } catch (error) {
-    console.error("Gemini error:", error);
+    console.error("Gemini REST error:", error.response?.data || error.message);
 
     return {
       summary: "AI explanation could not be generated.",

@@ -5,9 +5,9 @@ function formatResponse({
   drug,
   riskAssessment,
   variantData,
-  parsingSuccess
+  parsingSuccess,
+  llmExplanation
 }) {
-
   const timestamp = new Date().toISOString();
 
   const primaryGene = variantData?.gene || "Unknown";
@@ -22,32 +22,32 @@ function formatResponse({
     risk_assessment: {
       risk_label: riskAssessment.risk_label,
       confidence_score: riskAssessment.confidence_score,
-      severity: riskAssessment.severity
+      severity: riskAssessment.severity,
     },
 
     pharmacogenomic_profile: {
       primary_gene: primaryGene,
       diplotype: diplotype,
       phenotype: phenotype,
-      detected_variants: variantData?.detected_variants || []
+      detected_variants: variantData?.detected_variants || [],
     },
 
     clinical_recommendation: {
       recommendation: generateRecommendation(riskAssessment),
-      guideline_source: "CPIC Level A/B (Simulated)"
+      guideline_source: "CPIC Level A/B (Simulated)",
     },
 
-    llm_generated_explanation: {
-      summary: "LLM explanation will be generated in Phase 5.",
-      mechanism: "Variant impacts enzyme metabolism altering drug response.",
-      citations: []
+    llm_generated_explanation: llmExplanation || {
+      summary: "Explanation unavailable.",
+      mechanism: "Not generated.",
+      citations: [],
     },
 
     quality_metrics: {
       vcf_parsing_success: parsingSuccess,
       variant_count: variantData?.detected_variants?.length || 0,
-      timestamp_processed: timestamp
-    }
+      timestamp_processed: timestamp,
+    },
   };
 }
 

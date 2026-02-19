@@ -6,7 +6,6 @@ const evaluateRisk = require("../utils/riskEngine");
 const formatResponse = require("../utils/formatResponse");
 const generateExplanation = require("../services/geminiService");
 
-
 exports.analyzeVCF = async (req, res) => {
   try {
     const file = req.file;
@@ -35,9 +34,28 @@ exports.analyzeVCF = async (req, res) => {
 
     const normalizedDrug = drug.toUpperCase();
 
-    const primaryGene = relevantVariants[0]?.gene || "UNKNOWN";
-    const diplotype = "Not Determined";
-    const phenotype = "Normal Metabolizer";
+    const primaryGene = relevantVariants[0]?.gene || "Unknown";
+    const diplotype = relevantVariants.length > 0 ? "*1/*1" : "Unknown";
+    const phenotype = relevantVariants.length > 0 ? "NM" : "Unknown";
+
+    // 🔥 Generate LLM Explanation (Phase 5)
+    let llmExplanation = {
+      summary: "Explanation unavailable.",
+      mechanism: "Not generated.",
+      citations: [],
+    };
+
+    try {
+      llmExplanation = await generateExplanation({
+        drug: normalizedDrug,
+        gene: primaryGene,
+        phenotype,
+        riskLabel: riskAssessment.risk_label,
+        detectedVariants: relevantVariants,
+      });
+    } catch (err) {
+      console.error("Gemini error:", err.message);
+    }
 
     const formattedOutput = formatResponse({
       patientId: "PATIENT_001",
@@ -50,6 +68,7 @@ exports.analyzeVCF = async (req, res) => {
         detected_variants: relevantVariants,
       },
       parsingSuccess: true,
+      llmExplanation,
     });
 
     const savedAnalysis = await Analysis.create(formattedOutput);
