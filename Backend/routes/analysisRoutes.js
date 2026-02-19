@@ -10,6 +10,6 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 // POST endpoint
-router.post("/analyze", upload.single("vcfFile"), analyzeVCF);
+router.post("/analyze", upload.single("file"), analyzeVCF);
 
 module.exports = router;

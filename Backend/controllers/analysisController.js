@@ -32,7 +32,8 @@ exports.analyzeVCF = async (req, res) => {
 
     console.log("Risk Assessment:", riskAssessment);
 
-    const normalizedDrug = drug.toUpperCase();
+    const normalizedDrug = drug.trim().toUpperCase();
+
 
     const primaryGene = relevantVariants[0]?.gene || "Unknown";
     const diplotype = relevantVariants.length > 0 ? "*1/*1" : "Unknown";
