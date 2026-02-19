@@ -1,19 +1,28 @@
 import React, { useState } from "react";
 import UploadForm from "../components/UploadForm";
 import RiskCard from "../components/RiskCard";
+import "./Dashboard.css";
 
 const Dashboard = () => {
   const [result, setResult] = useState(null);
 
   return (
-    <div className="container mt-5">
-      <h2 className="mb-4 text-center">PharmaGuard Dashboard</h2>
+    <div className="dashboard-wrapper">
+      <div className="dashboard-container">
 
-      <UploadForm setResult={setResult} />
+        <h2 className="text-center dashboard-title">
+          PharmaGuard Dashboard
+        </h2>
 
-      {result && (
-        <RiskCard risk={result.risk_assessment} />
-      )}
+        <UploadForm setResult={setResult} />
+
+        {result && (
+          <div className="mt-4 risk-card-animate">
+            <RiskCard risk={result.risk_assessment} />
+          </div>
+        )}
+
+      </div>
     </div>
   );
 };
