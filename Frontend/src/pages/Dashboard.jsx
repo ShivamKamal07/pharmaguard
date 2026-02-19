@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import UploadForm from "../components/UploadForm";
 import RiskCard from "../components/RiskCard";
+import JsonReportCard from "../components/JsonReportCard";
 import "./Dashboard.css";
 
 const Dashboard = () => {
@@ -14,11 +15,20 @@ const Dashboard = () => {
           PharmaGuard Dashboard
         </h2>
 
+        {/* Upload Form */}
         <UploadForm setResult={setResult} />
 
+        {/* Risk Card */}
         {result && (
           <div className="mt-4 risk-card-animate">
             <RiskCard risk={result.risk_assessment} />
+          </div>
+        )}
+
+        {/* Full JSON Report Card */}
+        {result && (
+          <div className="mt-4">
+            <JsonReportCard data={result} />
           </div>
         )}
 
