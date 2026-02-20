@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import UploadForm from "../components/UploadForm";
 import RiskCard from "../components/RiskCard";
 import JsonReportCard from "../components/JsonReportCard";
+import RiskGraph from "../components/RiskGraph";
 import "./Dashboard.css";
 
 const Dashboard = () => {
@@ -29,6 +30,12 @@ const Dashboard = () => {
         {result && (
           <div className="mt-4">
             <JsonReportCard data={result} />
+          </div>
+        )}
+
+        {result && (
+          <div className="mt-4">
+            <RiskGraph risk={result.risk_assessment} />
           </div>
         )}
 
