@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const analyzeVCF = async (formData) => {
   const response = await axios.post(
-    "https://pharmaguard-alpha.vercel.app/api/analyze",
+    "https://pharmaguard-ks5i.onrender.com/api/analyze",
     formData,
     {
       headers: {
