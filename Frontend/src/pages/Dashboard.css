@@ -1,40 +1,40 @@
 /* Dashboard Background */
-.dashboard-wrapper {
+/* .dashboard-wrapper {
   min-height: 100vh;
   background: linear-gradient(135deg, #f4f7fa, #e9eff5);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
-}
+} */
 
 /* Center Container */
-.dashboard-container {
+/* .dashboard-container {
   width: 100%;
   max-width: 800px;
-}
+} */
 
 /* Title Styling */
-.dashboard-title {
+/* .dashboard-title {
   font-weight: 600;
   color: #1f3c88;
   margin-bottom: 30px;
-}
+} */
 
 /* Card Styling */
-.card {
+/* .card {
   border-radius: 15px !important;
   border: none !important;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
-}
+} */
 
 /* Risk Card Animation */
-.risk-card-animate {
+/* .risk-card-animate {
   animation: fadeInUp 0.5s ease-in-out;
-}
+} */
 
 /* Smooth Fade Animation */
-@keyframes fadeInUp {
+/* @keyframes fadeInUp {
   from {
     opacity: 0;
     transform: translateY(15px);
@@ -43,10 +43,10 @@
     opacity: 1;
     transform: translateY(0);
   }
-}
+} */
 
 /* Responsive Adjustments */
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
   .dashboard-container {
     max-width: 100%;
   }
@@ -54,4 +54,4 @@
   .dashboard-title {
     font-size: 1.4rem;
   }
-}
+} */

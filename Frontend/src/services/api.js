@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const analyzeVCF = async (formData) => {
   const response = await axios.post(
-    "https://pharmaguard-ks5i.onrender.com/api/analyze",
+    "http://localhost:5000/api/analyze",
     formData,
     {
       headers: {
@@ -12,4 +12,17 @@ export const analyzeVCF = async (formData) => {
   );
 
   return response.data;
+};
+
+export const getReports = async () => {
+  const response = await axios.get(
+    "http://localhost:5000/api/reports"
+  );
+  return response.data;
+};
+
+export const deleteReport = async (id) => {
+  await axios.delete(
+    `http://localhost:5000/api/reports/${id}`
+  );
 };

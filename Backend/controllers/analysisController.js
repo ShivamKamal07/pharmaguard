@@ -34,7 +34,6 @@ exports.analyzeVCF = async (req, res) => {
 
     const normalizedDrug = drug.trim().toUpperCase();
 
-
     const primaryGene = relevantVariants[0]?.gene || "Unknown";
     const diplotype = relevantVariants.length > 0 ? "*1/*1" : "Unknown";
     const phenotype = relevantVariants.length > 0 ? "NM" : "Unknown";
@@ -72,28 +71,16 @@ exports.analyzeVCF = async (req, res) => {
       llmExplanation,
     });
 
-    const savedAnalysis = await Analysis.create(formattedOutput);
+    // Save to MongoDB
+    await Analysis.create({
+      userId: "demo-user",
+      patient_id: formattedOutput.patient_id,
+      drug: formattedOutput.drug,
+      risk_assessment: formattedOutput.risk_assessment,
+      full_json: formattedOutput,
+    });
 
-    // // Final result object
-    // const finalJson = {
-    //   totalVariants: parsedVariants.length,
-    //   pharmacogenomicVariants: relevantVariants.length,
-    //   variants: relevantVariants,
-    //   risk: riskAssessment,
-    // };
-
-    // ✅ Save to MongoDB
-    // const savedAnalysis = await Analysis.create({
-    //   patient_id: "PATIENT_001", // You can make this dynamic later
-    //   drug,
-    //   result: finalJson,
-    // });
-
-    // return res.status(200).json({
-    //   message: "VCF parsed and saved successfully",
-    //   analysisId: savedAnalysis._id,
-    //   ...finalJson,
-    // });
+    // const savedAnalysis = await Analysis.create(formattedOutput);
 
     return res.status(200).json(formattedOutput);
   } catch (error) {
