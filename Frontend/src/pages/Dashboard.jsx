@@ -13,15 +13,19 @@ const Dashboard = () => {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch Reports
+  // FETCH REPORTS
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getReports();
+        const response = await getReports();
+
+        // handle different API formats
+        const data = Array.isArray(response) ? response : response?.data || [];
+
         setReports(data);
-        setLoading(false);
       } catch (error) {
         console.error("Error fetching reports:", error);
+      } finally {
         setLoading(false);
       }
     };
@@ -29,40 +33,42 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
-  // Severity Counts
-  const high = reports.filter(
-    (r) => r.risk_assessment?.severity === "High",
-  ).length;
+  // SEVERITY COUNTS
+const high = reports.filter((r) =>
+  r?.risk_assessment?.severity?.toLowerCase()?.includes("high")
+).length;
 
-  const moderate = reports.filter(
-    (r) => r.risk_assessment?.severity === "Moderate",
-  ).length;
+const moderate = reports.filter((r) =>
+  r?.risk_assessment?.severity?.toLowerCase()?.includes("moderate")
+).length;
 
-  const low = reports.filter(
-    (r) => r.risk_assessment?.severity === "Low",
-  ).length;
+const low = reports.filter((r) =>
+  r?.risk_assessment?.severity?.toLowerCase()?.includes("low")
+).length;
 
-  // Average Confidence
+  // AVG CONFIDENCE
   const avgConfidence =
     reports.length > 0
       ? (
           reports.reduce(
-            (acc, curr) => acc + (curr.risk_assessment?.confidence_score || 0),
-            0,
+            (acc, curr) =>
+              acc + (curr?.risk_assessment?.confidence_score || 0),
+            0
           ) / reports.length
         ).toFixed(1)
       : 0;
 
-  // Chart Data
-  const data = [
-    { name: "High Risk", value: high || 0 },
-    { name: "Moderate Risk", value: moderate || 0 },
-    { name: "Low Risk", value: low || 0 },
+  // CHART DATA
+  const chartData = [
+    { name: "High Risk", value: high },
+    { name: "Moderate Risk", value: moderate },
+    { name: "Low Risk", value: low },
   ];
 
   const COLORS = ["#dc3545", "#ffc107", "#28a745"];
 
-  // Loading UI
+  const hasData = high + moderate + low > 0;
+
   if (loading) {
     return <p>Loading dashboard...</p>;
   }
@@ -103,34 +109,39 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* PIE CHART */}
+      {/* CHART */}
 
       <div className="card shadow-sm p-4">
         <h5 className="mb-3 text-center">Risk Distribution</h5>
 
-        <div style={{ width: "100%", height: 600 }}>
-          <ResponsiveContainer>
-            <PieChart>
-              <Pie
-                data={data}
-                dataKey="value"
-                nameKey="name"
-                cx="50%"
-                cy="50%"
-                outerRadius={120}
-                fill="#8884d8"
-                label
-              >
-                {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index]} />
-                ))}
-              </Pie>
+        {!hasData ? (
+          <p className="text-center text-muted">
+            No analysis data available yet
+          </p>
+        ) : (
+          <div style={{ width: "100%", height: 400 }}>
+            <ResponsiveContainer>
+              <PieChart>
+                <Pie
+                  data={chartData}
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={100}
+                  label
+                >
+                  {chartData.map((entry, index) => (
+                    <Cell key={index} fill={COLORS[index]} />
+                  ))}
+                </Pie>
 
-              <Tooltip />
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        )}
       </div>
     </div>
   );
