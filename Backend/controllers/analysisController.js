@@ -8,6 +8,7 @@ const generateExplanation = require("../services/geminiService");
 
 exports.analyzeVCF = async (req, res) => {
   try {
+    const userId = req.user.id;
     const file = req.file;
     const { drug } = req.body;
 
@@ -23,11 +24,11 @@ exports.analyzeVCF = async (req, res) => {
     // Convert buffer to string
     const fileContent = file.buffer.toString("utf-8");
 
-    // 🔬 Parse + Filter
+    // Parse + Filter
     const parsedVariants = parseVCF(fileContent);
     const relevantVariants = filterRelevantVariants(parsedVariants);
 
-    // ✅ 🧪 ADD RISK ENGINE HERE
+    //  ADD RISK ENGINE HERE
     const riskAssessment = evaluateRisk(relevantVariants, drug);
 
     console.log("Risk Assessment:", riskAssessment);
@@ -38,7 +39,7 @@ exports.analyzeVCF = async (req, res) => {
     const diplotype = relevantVariants.length > 0 ? "*1/*1" : "Unknown";
     const phenotype = relevantVariants.length > 0 ? "NM" : "Unknown";
 
-    // 🔥 Generate LLM Explanation (Phase 5)
+    //  Generate LLM Explanation (Phase 5)
     let llmExplanation = {
       summary: "Explanation unavailable.",
       mechanism: "Not generated.",
@@ -73,18 +74,33 @@ exports.analyzeVCF = async (req, res) => {
 
     // Save to MongoDB
     await Analysis.create({
-      userId: "demo-user",
+      userId: userId,
       patient_id: formattedOutput.patient_id,
       drug: formattedOutput.drug,
       risk_assessment: formattedOutput.risk_assessment,
       full_json: formattedOutput,
     });
-
-    // const savedAnalysis = await Analysis.create(formattedOutput);
-
     return res.status(200).json(formattedOutput);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Server error" });
+  }
+};
+
+exports.getReports = async (req, res) => {
+  try {
+
+    const reports = await Analysis.find({
+      userId: req.user.id
+    }).sort({ createdAt: -1 });
+
+    res.status(200).json(reports);
+
+  } catch (error) {
+
+    res.status(500).json({
+      message: "Error fetching reports"
+    });
+
   }
 };

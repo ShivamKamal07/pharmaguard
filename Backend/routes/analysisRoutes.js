@@ -1,37 +1,41 @@
-
 const express = require("express");
 const multer = require("multer");
-const { analyzeVCF } = require("../controllers/analysisController");
+
+const { analyzeVCF, getReports } = require("../controllers/analysisController");
 const Analysis = require("../models/Analysis");
+const authMiddleware = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-// Store file in memory (temporary)
+// Store file in memory
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// POST endpoint
-router.post("/analyze", upload.single("file"), analyzeVCF);
+// Analyze VCF
+router.post("/analyze", authMiddleware, upload.single("file"), analyzeVCF);
 
-// ✅ GET ALL REPORTS
-router.get("/reports", async (req, res) => {
-  try {
-    const reports = await Analysis.find().sort({ createdAt: -1 });
-    res.json(reports);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to fetch reports" });
-  }
-});
+// Get Reports (User Specific)
+router.get("/reports", authMiddleware, getReports);
 
-// ✅ DELETE REPORT
-router.delete("/reports/:id", async (req, res) => {
+// Delete Report
+router.delete("/reports/:id", authMiddleware, async (req, res) => {
   try {
-    await Analysis.findByIdAndDelete(req.params.id);
+
+    await Analysis.findOneAndDelete({
+      _id: req.params.id,
+      userId: req.user.id
+    });
+
     res.json({ message: "Report deleted successfully" });
+
   } catch (error) {
+
     console.error(error);
-    res.status(500).json({ error: "Delete failed" });
+
+    res.status(500).json({
+      error: "Delete failed"
+    });
+
   }
 });
 
