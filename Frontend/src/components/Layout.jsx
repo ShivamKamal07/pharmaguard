@@ -1,22 +1,31 @@
 import React from "react";
 import Sidebar from "./Sidebar";
-import Topbar from "./Topbar";
+import Navbar from "./Navbar";
 
 const Layout = ({ children }) => {
+
   return (
-    <div className="d-flex">
-      
+
+    <div>
+
       <Sidebar />
 
-      <div className="flex-grow-1" style={{ marginLeft: "250px" }}>
-        <Topbar />
-        <div className="p-4" style={{ backgroundColor: "#f4f6f9", minHeight: "100vh" }}>
-          {children}
-        </div>
+      <Navbar />
+
+      <div
+        style={{
+          marginLeft: "250px",
+          padding: "20px",
+          marginTop: "60px"
+        }}
+      >
+        {children}
       </div>
 
     </div>
+
   );
+
 };
 
 export default Layout;

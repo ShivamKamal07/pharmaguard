@@ -1,28 +1,50 @@
 import axios from "axios";
 
+const API = axios.create({
+  baseURL: "http://localhost:5000/api",
+});
+
+// Attach token automatically
+API.interceptors.request.use((req) => {
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    req.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return req;
+});
+
+// REGISTER
+export const registerUser = async (data) => {
+  const res = await API.post("/auth/register", data);
+  return res.data;
+};
+
+// LOGIN
+export const loginUser = async (data) => {
+  const res = await API.post("/auth/login", data);
+  return res.data;
+};
+
+// ANALYZE VCF
 export const analyzeVCF = async (formData) => {
-  const response = await axios.post(
-    "http://localhost:5000/api/analyze",
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+  const res = await API.post("/analyze", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
-  return response.data;
+  return res.data;
 };
 
+// GET REPORTS
 export const getReports = async () => {
-  const response = await axios.get(
-    "http://localhost:5000/api/reports"
-  );
-  return response.data;
+  const res = await API.get("/reports");
+  return res.data;
 };
 
+// DELETE REPORT
 export const deleteReport = async (id) => {
-  await axios.delete(
-    `http://localhost:5000/api/reports/${id}`
-  );
+  await API.delete(`/reports/${id}`);
 };

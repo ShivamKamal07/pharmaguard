@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
 const Sidebar = () => {
+
   const location = useLocation();
 
   const linkClass = (path) =>
@@ -17,8 +18,9 @@ const Sidebar = () => {
       <h4 className="mb-4">PharmaGuard</h4>
 
       <ul className="nav flex-column">
+
         <li className="nav-item mb-3">
-          <Link className={linkClass("/")} to="/">
+          <Link className={linkClass("/dashboard")} to="/dashboard">
             Dashboard
           </Link>
         </li>
@@ -46,6 +48,7 @@ const Sidebar = () => {
             Settings
           </Link>
         </li>
+
       </ul>
     </div>
   );
