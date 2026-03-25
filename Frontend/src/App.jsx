@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Analyze from "./pages/Analyze";
+import Chat from "./pages/Chat";
 import Reports from "./pages/Reports";
 import History from "./pages/History";
 import Settings from "./pages/Settings";
@@ -18,7 +19,6 @@ const App = () => {
     <Router>
       <Layout>
         <Routes>
-
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
@@ -36,6 +36,15 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <Analyze />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/chat"
+            element={
+              <ProtectedRoute>
+                <Chat />
               </ProtectedRoute>
             }
           />
@@ -66,7 +75,6 @@ const App = () => {
               </ProtectedRoute>
             }
           />
-
         </Routes>
       </Layout>
     </Router>

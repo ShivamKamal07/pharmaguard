@@ -3,6 +3,7 @@ const cors = require("cors");
 
 const authRoutes = require("./routes/authRoutes");
 const analysisRoutes = require("./routes/analysisRoutes");
+const chatRoutes = require("./routes/chatRoute");
 
 const app = express();
 
@@ -13,5 +14,6 @@ app.use(express.json());
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api", analysisRoutes);
+app.use("/api/chat", chatRoutes);
 
 module.exports = app;

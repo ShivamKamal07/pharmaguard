@@ -1,14 +1,23 @@
 const axios = require("axios");
 
-async function generateExplanation({
-  drug,
-  gene,
-  phenotype,
-  riskLabel,
-  detectedVariants
-}) {
+async function generateExplanation(input) {
   try {
-    const prompt = `
+    let prompt = "";
+
+    // Handle custom prompt
+    if (input.prompt) {
+      prompt = input.prompt;
+    } else {
+      //structured logic (Analysis)
+      const {
+        drug,
+        gene,
+        phenotype,
+        riskLabel,
+        detectedVariants
+      } = input;
+
+      prompt = `
 You are a clinical pharmacogenomics expert.
 
 Patient pharmacogenomic profile:
@@ -26,7 +35,9 @@ Generate response strictly in JSON format:
   "citations": ["rsXXXX"]
 }
 `;
+    }
 
+    //Gemini REST API Call
     const response = await axios.post(
       "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent",
       {
@@ -39,14 +50,17 @@ Generate response strictly in JSON format:
       }
     );
 
+    // Extract text safely
     const text =
       response.data.candidates?.[0]?.content?.parts?.[0]?.text || "";
 
+    //  Clean markdown if exists
     const cleaned = text
       .replace(/```json/g, "")
       .replace(/```/g, "")
       .trim();
 
+    // 🧠 Try parsing JSON
     try {
       return JSON.parse(cleaned);
     } catch {

@@ -32,6 +32,12 @@ const Sidebar = () => {
         </li>
 
         <li className="nav-item mb-3">
+          <Link className={linkClass("/chat")} to="/chat">
+            Chat with AI
+          </Link>
+        </li>
+
+        <li className="nav-item mb-3">
           <Link className={linkClass("/reports")} to="/reports">
             Reports
           </Link>

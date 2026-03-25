@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { getReports, deleteReport } from "../services/api";
 import jsPDF from "jspdf";
+import { useNavigate } from "react-router-dom";
 
 const Reports = () => {
+  const navigate = useNavigate();
   const [reports, setReports] = useState([]);
   const [filteredReports, setFilteredReports] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -37,13 +39,13 @@ const Reports = () => {
 
     if (selectedDrug) {
       filtered = filtered.filter(
-        (r) => r.drug?.toLowerCase() === selectedDrug.toLowerCase()
+        (r) => r.drug?.toLowerCase() === selectedDrug.toLowerCase(),
       );
     }
 
     if (searchPatient) {
       filtered = filtered.filter((r) =>
-        r.patient_id?.toLowerCase().includes(searchPatient.toLowerCase())
+        r.patient_id?.toLowerCase().includes(searchPatient.toLowerCase()),
       );
     }
 
@@ -76,17 +78,17 @@ const Reports = () => {
     doc.text(
       `Risk Label: ${report.risk_assessment?.risk_label || "Unknown"}`,
       20,
-      60
+      60,
     );
     doc.text(
       `Severity: ${report.risk_assessment?.severity || "Unknown"}`,
       20,
-      70
+      70,
     );
     doc.text(
       `Date: ${new Date(report.createdAt).toLocaleDateString()}`,
       20,
-      80
+      80,
     );
 
     doc.save(`report-${report.patient_id}.pdf`);
@@ -158,19 +160,17 @@ const Reports = () => {
                       report.risk_assessment?.severity === "High"
                         ? "bg-danger"
                         : report.risk_assessment?.severity === "Moderate"
-                        ? "bg-warning text-dark"
-                        : report.risk_assessment?.severity === "Low"
-                        ? "bg-success"
-                        : "bg-secondary"
+                          ? "bg-warning text-dark"
+                          : report.risk_assessment?.severity === "Low"
+                            ? "bg-success"
+                            : "bg-secondary"
                     }`}
                   >
                     {report.risk_assessment?.severity || "Unknown"}
                   </span>
                 </td>
 
-                <td>
-                  {new Date(report.createdAt).toLocaleDateString()}
-                </td>
+                <td>{new Date(report.createdAt).toLocaleDateString()}</td>
 
                 <td>
                   <button
@@ -193,6 +193,15 @@ const Reports = () => {
                   >
                     Delete
                   </button>
+                  <button
+                  className="btn btn-secondary btn-sm me-2"
+                  type="button" 
+                    onClick={() =>
+                      navigate("/chat", { state: { reportId: report._id } })
+                    }
+                  >
+                    Ask AI
+                  </button>
                 </td>
               </tr>
             ))
@@ -211,7 +220,6 @@ const Reports = () => {
         <div className="modal show d-block" tabIndex="-1">
           <div className="modal-dialog modal-lg">
             <div className="modal-content">
-
               <div className="modal-header">
                 <h5 className="modal-title">Clinical Report Details</h5>
 
@@ -226,7 +234,6 @@ const Reports = () => {
                   {JSON.stringify(selectedReport.full_json, null, 2)}
                 </pre>
               </div>
-
             </div>
           </div>
         </div>

@@ -38,6 +38,12 @@ export const analyzeVCF = async (formData) => {
   return res.data;
 };
 
+//chat with Ai
+export const chatWithAI = async (data) => {
+  const res = await API.post("/chat", data);
+  return res.data;
+};
+
 // GET REPORTS
 export const getReports = async () => {
   const res = await API.get("/reports");
