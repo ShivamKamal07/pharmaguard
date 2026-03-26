@@ -69,7 +69,7 @@ function evaluateRisk(variants, drug) {
 
   if (!rule) {
     return {
-      risk_label: "Unknown",
+      risk_label: "Unsafe",
       confidence_score: 0.2,
       severity: "low"
     };
@@ -90,7 +90,7 @@ function evaluateRisk(variants, drug) {
 
   if (!mapping) {
     return {
-      risk_label: "Unknown",
+      risk_label: "Unsafe",
       confidence_score: 0.3,
       severity: "low"
     };

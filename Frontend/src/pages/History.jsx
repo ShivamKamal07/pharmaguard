@@ -51,7 +51,7 @@ const History = () => {
                   <td>{index + 1}</td>
 
                   <td>
-                    {item.compound_name || item.compound || "Unknown"}
+                    {item.compound_name || item.compound || item.drug || "Unknown"}
                   </td>
 
                   <td>
