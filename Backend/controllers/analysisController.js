@@ -1,4 +1,5 @@
 // controllers/analysisController.js
+
 const { parseVCF } = require("../services/vcfParser");
 const { filterRelevantVariants } = require("../services/geneExtractor");
 const Analysis = require("../models/Analysis");
@@ -6,10 +7,11 @@ const evaluateRisk = require("../utils/riskEngine");
 const formatResponse = require("../utils/formatResponse");
 const generateExplanation = require("../services/geminiService");
 
+
 exports.analyzeVCF = async (req, res) => {
   try {
     const userId = req.user.id;
-    const file = req.file;
+    const file = req.file;    
     const { drug } = req.body;
 
     // Validation
@@ -57,9 +59,10 @@ exports.analyzeVCF = async (req, res) => {
     } catch (err) {
       console.error("Gemini error:", err.message);
     }
-
+    
+    const count = await Analysis.countDocuments();
     const formattedOutput = formatResponse({
-      patientId: "PATIENT_001",
+      patientId: `PATIENT_${String(count + 1).padStart(3, "0")}`,
       drug: normalizedDrug,
       riskAssessment,
       variantData: {
