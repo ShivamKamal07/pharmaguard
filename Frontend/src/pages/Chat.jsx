@@ -2,6 +2,12 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { chatWithAI } from "../services/api";
 
+const cleanText = (text) => {
+  return text
+    .replace(/\n{2,}/g, "\n")   // extra line breaks remove
+    .replace(/\*\*/g, "")       // markdown bold remove
+    .trim();
+};
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
@@ -21,7 +27,10 @@ const Chat = () => {
         reportId: reportId,
       });
 
-      const botMessage = { type: "bot", text: res.reply };
+      const botMessage = {
+        type: "bot",
+        text: cleanText(res.reply),
+      };
 
       setMessages((prev) => [...prev, botMessage]);
       setInput("");

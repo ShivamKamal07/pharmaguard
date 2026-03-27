@@ -11,7 +11,7 @@ exports.chatWithAI = async (req, res) => {
 
     let contextData = "";
 
-    // if reportId provided → use context 
+    // Get report context
     if (reportId) {
       const report = await Analysis.findOne({
         _id: reportId,
@@ -25,27 +25,90 @@ exports.chatWithAI = async (req, res) => {
       contextData = JSON.stringify(report.full_json);
     }
 
-    //  Prompt Engineering 
-    const prompt = `
-You are an expert pharmacogenomics AI assistant.
+    // MASTER PROMPT
+    const masterPrompt = `
+You are an advanced pharmacogenomics AI assistant helping clinicians and patients understand drug risks.
 
-Here is a patient's clinical pharmacogenomic report:
-${contextData}
+---------------------
+PATIENT REPORT DATA:
+${contextData || "No report provided"}
+---------------------
 
-User question:
+USER QUESTION:
 ${message}
 
-Instructions:
-- Always answer based on the report data if available.
-- If the user asks general questions (like side effects), answer normally.
-- If risk is HIGH, clearly explain why in simple terms.
-- Avoid saying "data is undefined".
-- Keep answers short, clear, and helpful.
+---------------------
+INSTRUCTIONS:
 
-Answer:
+1. If report data is available:
+   - Use it to give a personalized answer
+   - Explain WHY risk is high/low/moderate
+   - Mention gene-drug interaction if possible
+
+2. If question is general (not report-specific):
+   - Answer like a medical assistant
+   - Give general safe medical info
+
+3. Always:
+   - Use simple, human-friendly language
+   - Avoid technical jargon unless necessary
+   - NEVER say "data is missing" or "undefined"
+   - If unsure, give best possible general guidance
+
+4. Output format:
+   - Start with a clear answer
+   - Then short explanation
+   - Optional: precautions or suggestions
+
+---------------------
+
+ANSWER:
 `;
 
-    const aiResponse = await generateExplanation({ prompt });
+    //Intent Detection
+    const isGeneralQuestion = !contextData;
+
+    let finalPrompt = "";
+
+    if (isGeneralQuestion) {
+      finalPrompt = `
+You are a medical assistant.
+
+User Question:
+${message}
+
+Give a clear, helpful, and medically safe answer in simple language.
+`;
+    } else {
+      finalPrompt = masterPrompt;
+    }
+
+    // Simple Mode
+    const isSimple = message.toLowerCase().includes("simple");
+
+    if (isSimple) {
+      finalPrompt += `
+Explain the answer in very simple terms, like explaining to a beginner.
+`;
+    }
+
+    // Risk Highlighting
+    finalPrompt += `
+If risk level is HIGH:
+- Clearly warn the user
+- Suggest caution or doctor consultation
+
+If LOW:
+- Reassure the user
+
+If MODERATE:
+- Explain balanced risk
+`;
+
+    // Call Gemini
+    const aiResponse = await generateExplanation({
+      prompt: finalPrompt,
+    });
 
     res.status(200).json({
       reply: aiResponse.summary || aiResponse,
