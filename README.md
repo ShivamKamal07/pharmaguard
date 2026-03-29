@@ -2,7 +2,7 @@
 
 PharmaGuard is an AI-powered web application that analyzes patient genetic data (VCF files) along with drug names to predict pharmacogenomic risks and provide clinically actionable recommendations with explainable AI.
 
-This project is built for the RIFT 2026 Hackathon under the Pharmacogenomics / Explainable AI Track.
+demo link-- 
 
 ---
 
@@ -25,7 +25,9 @@ This project is built for the RIFT 2026 Hackathon under the Pharmacogenomics / E
 - Generate explainable AI insights using LLM  
 - Provide CPIC-based clinical recommendations  
 - Download structured JSON output  
-- Clean UI with color-coded risk display  
+- Clean UI with color-coded risk display
+- ai chat assistent
+- role based access 
 
 ---
 
@@ -39,55 +41,11 @@ PharmaGuard solves this by:
 2. Detecting gene-drug interactions  
 3. Predicting risk  
 4. Giving dosage guidance  
-5. Explaining the reason using AI  
+5. Explaining the reason using AI
+6. ai chat assistent  
 
 ---
 
-## 🏗️ Project Structure
-
-pharma-guard/
-│
-├── backend/
-│ ├── controllers/
-│ │ └── analysisController.js
-│ ├── models/
-│ │ └── Analysis.js
-│ ├── routes/
-│ │ └── analysisRoutes.js
-│ ├── services/
-│ │ ├── analysisService.js
-│ │ ├── geneExtractor.js
-│ │ └── vcfParser.js
-│ ├── utils/
-│ │ ├── formatResponse.js
-│ │ └── isRiskEngine.js
-│ ├── sample_vcfs/
-│ ├── app.js
-│ ├── server.js
-│ ├── package.json
-│ └── .env.example
-│
-├── frontend/
-│ ├── public/
-│ ├── src/
-│ │ ├── components/
-│ │ │ ├── RiskCard.jsx
-│ │ │ └── UploadForm.jsx
-│ │ ├── pages/
-│ │ │ ├── Home.jsx
-│ │ │ └── Results.jsx
-│ │ ├── api/
-│ │ │ └── client.js
-│ │ ├── App.jsx
-│ │ ├── main.jsx
-│ │ └── index.css
-│ ├── package.json
-│ └── vite.config.js
-│
-└── README.md
-
-
----
 
 ## ⚙️ Installation & Setup
 
