@@ -9,6 +9,7 @@ const Register = () => {
   const [name,setName] = useState("");
   const [email,setEmail] = useState("");
   const [password,setPassword] = useState("");
+  const [role, setRole] = useState("patient");
 
   const handleRegister = async (e) => {
 
@@ -16,7 +17,7 @@ const Register = () => {
 
     try {
 
-      await registerUser({name,email,password});
+      await registerUser({name,email,password, role});
 
       alert("Registration successful");
 
@@ -68,6 +69,15 @@ const Register = () => {
             onChange={(e)=>setPassword(e.target.value)}
             required
           />
+
+          <select
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            style={styles.input}
+          >
+            <option value="patient">Patient</option>
+            <option value="doctor">Doctor</option>
+          </select>
 
           <button style={styles.button} type="submit">
             Register

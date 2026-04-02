@@ -1,9 +1,10 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import { getRole } from "../utils/auth";
 
 const Sidebar = () => {
-
   const location = useLocation();
+  const role = getRole();
 
   const linkClass = (path) =>
     location.pathname === path
@@ -19,36 +20,72 @@ const Sidebar = () => {
 
       <ul className="nav flex-column">
 
+        {/* 🔥 DASHBOARD */}
         <li className="nav-item mb-3">
-          <Link className={linkClass("/dashboard")} to="/dashboard">
-            Dashboard
-          </Link>
+          {role === "doctor" ? (
+            <Link className={linkClass("/doctor-dashboard")} to="/doctor-dashboard">
+              Doctor Dashboard
+            </Link>
+          ) : (
+            <Link className={linkClass("/dashboard")} to="/dashboard">
+              Dashboard
+            </Link>
+          )}
         </li>
 
-        <li className="nav-item mb-3">
-          <Link className={linkClass("/analyze")} to="/analyze">
-            Analyze
-          </Link>
-        </li>
+        {/* 👤 PATIENT FEATURES */}
+        {role === "patient" && (
+          <>
+            <li className="nav-item mb-3">
+              <Link className={linkClass("/analyze")} to="/analyze">
+                Analyze
+              </Link>
+            </li>
 
-        <li className="nav-item mb-3">
-          <Link className={linkClass("/chat")} to="/chat">
-            Chat with AI
-          </Link>
-        </li>
+            <li className="nav-item mb-3">
+              <Link className={linkClass("/chat")} to="/chat">
+                Chat with AI
+              </Link>
+            </li>
 
-        <li className="nav-item mb-3">
-          <Link className={linkClass("/reports")} to="/reports">
-            Reports
-          </Link>
-        </li>
+            <li className="nav-item mb-3">
+              <Link className={linkClass("/reports")} to="/reports">
+                Reports
+              </Link>
+            </li>
 
-        <li className="nav-item mb-3">
-          <Link className={linkClass("/history")} to="/history">
-            History
-          </Link>
-        </li>
+            <li className="nav-item mb-3">
+              <Link className={linkClass("/history")} to="/history">
+                History
+              </Link>
+            </li>
+          </>
+        )}
 
+        {/* 👨‍⚕️ DOCTOR FEATURES */}
+        {role === "doctor" && (
+          <>
+            <li className="nav-item mb-3">
+              <Link className={linkClass("/patients")} to="/patients">
+                Patients
+              </Link>
+            </li>
+
+            <li className="nav-item mb-3">
+              <Link className={linkClass("/appointments")} to="/appointments">
+                Appointments
+              </Link>
+            </li>
+
+            <li className="nav-item mb-3">
+              <Link className={linkClass("/chat-doctor")} to="/chat-doctor">
+                Patient Chat
+              </Link>
+            </li>
+          </>
+        )}
+
+        {/* ⚙️ COMMON */}
         <li className="nav-item">
           <Link className={linkClass("/settings")} to="/settings">
             Settings

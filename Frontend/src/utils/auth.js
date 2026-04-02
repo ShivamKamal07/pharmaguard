@@ -8,8 +8,21 @@ export const getToken = () => {
 
 export const logout = () => {
   localStorage.removeItem("token");
+  localStorage.removeItem("user");
 };
 
 export const isAuthenticated = () => {
   return !!localStorage.getItem("token");
+};
+
+export const saveUser = (user) => {
+  localStorage.setItem("user", JSON.stringify(user));
+};
+
+export const getUser = () => {
+  return JSON.parse(localStorage.getItem("user"));
+};
+
+export const getRole = () => {
+  return getUser()?.role;
 };

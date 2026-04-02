@@ -6,6 +6,7 @@ import Layout from "./components/Layout";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import DoctorDashboard from "./pages/DoctorDashboard";
 import Analyze from "./pages/Analyze";
 import Chat from "./pages/Chat";
 import Reports from "./pages/Reports";
@@ -27,6 +28,15 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/doctor-dashboard"
+            element={
+              <ProtectedRoute>
+                <DoctorDashboard />
               </ProtectedRoute>
             }
           />
