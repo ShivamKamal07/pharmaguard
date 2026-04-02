@@ -12,6 +12,7 @@ const cleanText = (text) => {
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
   const location = useLocation();
   const reportId = location.state?.reportId;
 
@@ -20,10 +21,12 @@ const Chat = () => {
 
     const userMessage = { type: "user", text: input };
     setMessages((prev) => [...prev, userMessage]);
-
+      
+  setInput("");
+  setLoading(true); 
     try {
       const res = await chatWithAI({
-        message: input,
+        message: userMessage.text,
         reportId: reportId,
       });
 
@@ -38,31 +41,47 @@ const Chat = () => {
     } catch (err) {
       console.error(err);
     }
+    setLoading(false);
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>AI Assistant 🤖</h2>
+    
+  <div style={{ padding: "20px" }}>
+    <h2>AI Assistant 🤖</h2>
 
-      <div style={{ minHeight: "300px", marginBottom: "20px" }}>
-        {messages.map((msg, i) => (
-          <div key={i} style={{ margin: "10px 0" }}>
-            <strong>{msg.type === "user" ? "You" : "AI"}:</strong> {msg.text}
-          </div>
-        ))}
-      </div>
+    <div style={{ minHeight: "300px", marginBottom: "20px" }}>
+      {messages.map((msg, i) => (
+        <div key={i} style={{ margin: "10px 0" }}>
+          <strong>{msg.type === "user" ? "You" : "AI"}:</strong> {msg.text}
+        </div>
+      ))}
 
-      {reportId && <p>💊 Chatting about selected report</p>}
-
-      <input
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        placeholder="Ask about your report..."
-      />
-
-      <button onClick={handleSend}>Send</button>
+      {/* Typing */}
+      {loading && (
+        <div style={{ margin: "10px 0", color: "gray" }}>
+          🤖 AI is typing...
+        </div>
+      )}
     </div>
-  );
+
+    {/* ✅ THIS LINE IS NOW SAFE */}
+    {reportId && (
+      <p style={{ marginBottom: "10px" }}>
+        💊 Chatting about selected report
+      </p>
+    )}
+
+    <input
+      value={input}
+      onChange={(e) => setInput(e.target.value)}
+      placeholder="Ask about your report..."
+    />
+
+    <button onClick={handleSend} disabled={loading}>
+      {loading ? "Thinking..." : "Send"}
+    </button>
+  </div>
+);
 };
 
 export default Chat;
