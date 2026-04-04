@@ -8,6 +8,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import DoctorDashboard from "./pages/DoctorDashboard";
 import Analyze from "./pages/Analyze";
+import Patients from "./pages/Patients";
 import Chat from "./pages/Chat";
 import Reports from "./pages/Reports";
 import History from "./pages/History";
@@ -85,6 +86,16 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+
+          <Route
+            path="/patients"
+            element={
+              <ProtectedRoute>
+                <Patients />
+              </ProtectedRoute>
+            }
+          />
+          
         </Routes>
       </Layout>
     </Router>

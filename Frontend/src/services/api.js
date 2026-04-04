@@ -54,3 +54,5 @@ export const getReports = async () => {
 export const deleteReport = async (id) => {
   await API.delete(`/reports/${id}`);
 };
+
+export default API;
