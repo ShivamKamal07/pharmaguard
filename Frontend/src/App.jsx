@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import DoctorDashboard from "./pages/DoctorDashboard";
 import Analyze from "./pages/Analyze";
 import Patients from "./pages/Patients";
+import PatientDetails from "./pages/PatientDetails";
 import Chat from "./pages/Chat";
 import Reports from "./pages/Reports";
 import History from "./pages/History";
@@ -96,6 +97,15 @@ const App = () => {
             }
           />
           
+          <Route
+            path="/patient/:id"
+            element={
+              <ProtectedRoute>
+                <PatientDetails />
+              </ProtectedRoute>
+            }
+          />
+
         </Routes>
       </Layout>
     </Router>
