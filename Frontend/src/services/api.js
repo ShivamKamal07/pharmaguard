@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "https://pharmaguard-ks5i.onrender.com",
 });
 
 // Attach token automatically
