@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://pharmaguard-1-8aia.onrender.com",
+  baseURL: "http://localhost:5000/api",
 });
 
 // Attach token automatically
@@ -54,3 +54,5 @@ export const getReports = async () => {
 export const deleteReport = async (id) => {
   await API.delete(`/reports/${id}`);
 };
+
+export default API;

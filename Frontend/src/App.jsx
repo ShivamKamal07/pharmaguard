@@ -6,7 +6,10 @@ import Layout from "./components/Layout";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import DoctorDashboard from "./pages/DoctorDashboard";
 import Analyze from "./pages/Analyze";
+import Patients from "./pages/Patients";
+import PatientDetails from "./pages/PatientDetails";
 import Chat from "./pages/Chat";
 import Reports from "./pages/Reports";
 import History from "./pages/History";
@@ -27,6 +30,15 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/doctor-dashboard"
+            element={
+              <ProtectedRoute>
+                <DoctorDashboard />
               </ProtectedRoute>
             }
           />
@@ -75,6 +87,25 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+
+          <Route
+            path="/patients"
+            element={
+              <ProtectedRoute>
+                <Patients />
+              </ProtectedRoute>
+            }
+          />
+          
+          <Route
+            path="/patient/:id"
+            element={
+              <ProtectedRoute>
+                <PatientDetails />
+              </ProtectedRoute>
+            }
+          />
+
         </Routes>
       </Layout>
     </Router>
