@@ -3,6 +3,13 @@ import { getReports, deleteReport } from "../services/api";
 import jsPDF from "jspdf";
 import { useNavigate } from "react-router-dom";
 
+const severityRisk = (level) => {
+  if (level === "High") return "risk-danger";
+  if (level === "Moderate") return "risk-warning";
+  if (level === "Low") return "risk-success";
+  return "risk-secondary";
+};
+
 const Reports = () => {
   const navigate = useNavigate();
   const [reports, setReports] = useState([]);
@@ -96,131 +103,137 @@ const Reports = () => {
 
   // Loading UI
   if (loading) {
-    return <p>Loading reports...</p>;
+    return (
+      <div className="pg-page">
+        <div className="pg-loading-wrap">
+          <span className="pg-spinner" />
+          Loading reports...
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div>
-      <h3 className="mb-4">All Clinical Reports</h3>
-
-      {/* FILTER SECTION */}
-      <div className="row mb-4">
-        <div className="col-md-4">
-          <select
-            className="form-select"
-            value={selectedDrug}
-            onChange={(e) => setSelectedDrug(e.target.value)}
-          >
-            <option value="">Filter by Drug</option>
-            {uniqueDrugs.map((drug, index) => (
-              <option key={index} value={drug}>
-                {drug}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="col-md-4">
-          <input
-            type="text"
-            placeholder="Search by Patient ID"
-            className="form-control"
-            style={{ maxWidth: "200px" }}
-            value={searchPatient}
-            onChange={(e) => setSearchPatient(e.target.value)}
-          />
+    <div className="pg-page">
+      <div className="pg-page-header">
+        <div>
+          <span className="pg-eyebrow">Clinical Data</span>
+          <h3>All Clinical Reports</h3>
         </div>
       </div>
 
+      {/* FILTER SECTION */}
+      <div className="pg-card pg-card-pad-sm mb-4" style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+        <select
+          className="pg-select"
+          style={{ maxWidth: 220 }}
+          value={selectedDrug}
+          onChange={(e) => setSelectedDrug(e.target.value)}
+        >
+          <option value="">Filter by Drug</option>
+          {uniqueDrugs.map((drug, index) => (
+            <option key={index} value={drug}>
+              {drug}
+            </option>
+          ))}
+        </select>
+
+        <input
+          type="text"
+          placeholder="Search by Patient ID"
+          className="pg-input"
+          style={{ maxWidth: 220 }}
+          value={searchPatient}
+          onChange={(e) => setSearchPatient(e.target.value)}
+        />
+      </div>
+
       {/* TABLE */}
-      <table className="table table-bordered shadow">
-        <thead className="table-dark">
-          <tr>
-            <th>Patient</th>
-            <th>Drug</th>
-            <th>Risk</th>
-            <th>Severity</th>
-            <th>Date</th>
-            <th>Action</th>
-          </tr>
-        </thead>
+      <div className="pg-table-wrap">
+        <table className="pg-table">
+          <thead>
+            <tr>
+              <th>Patient</th>
+              <th>Drug</th>
+              <th>Risk</th>
+              <th>Severity</th>
+              <th>Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
 
-        <tbody>
-          {filteredReports.length > 0 ? (
-            filteredReports.map((report) => (
-              <tr key={report._id}>
-                <td>{report.patient_id}</td>
-                <td>{report.drug}</td>
+          <tbody>
+            {filteredReports.length > 0 ? (
+              filteredReports.map((report) => (
+                <tr key={report._id}>
+                  <td className="pg-mono">{report.patient_id}</td>
+                  <td>{report.drug}</td>
 
-                <td>{report.risk_assessment?.risk_label || "Unknown"}</td>
+                  <td>{report.risk_assessment?.risk_label || "Unknown"}</td>
 
-                <td>
-                  <span
-                    className={`badge ${
-                      report.risk_assessment?.severity === "High"
-                        ? "bg-danger"
-                        : report.risk_assessment?.severity === "Moderate"
-                          ? "bg-warning text-dark"
-                          : report.risk_assessment?.severity === "Low"
-                            ? "bg-success"
-                            : "bg-secondary"
-                    }`}
-                  >
-                    {report.risk_assessment?.severity || "Unknown"}
-                  </span>
-                </td>
+                  <td>
+                    <span
+                      className={`pg-badge ${severityRisk(report.risk_assessment?.severity)}`}
+                    >
+                      <span className={`pg-signal-dot ${severityRisk(report.risk_assessment?.severity)}`} />
+                      {report.risk_assessment?.severity || "Unknown"}
+                    </span>
+                  </td>
 
-                <td>{new Date(report.createdAt).toLocaleDateString()}</td>
+                  <td>{new Date(report.createdAt).toLocaleDateString()}</td>
 
-                <td>
-                  <button
-                    className="btn btn-primary btn-sm me-2"
-                    onClick={() => setSelectedReport(report)}
-                  >
-                    View
-                  </button>
+                  <td>
+                    <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                      <button
+                        className="pg-btn pg-btn-primary pg-btn-sm"
+                        onClick={() => setSelectedReport(report)}
+                      >
+                        View
+                      </button>
 
-                  <button
-                    className="btn btn-secondary btn-sm me-2"
-                    onClick={() => exportPDF(report)}
-                  >
-                    PDF
-                  </button>
+                      <button
+                        className="pg-btn pg-btn-ghost pg-btn-sm"
+                        onClick={() => exportPDF(report)}
+                      >
+                        PDF
+                      </button>
 
-                  <button
-                    className="btn btn-danger btn-sm"
-                    onClick={() => handleDelete(report._id)}
-                  >
-                    Delete
-                  </button>
-                  <button
-                  className="btn btn-secondary btn-sm me-2"
-                  type="button" 
-                    onClick={() =>
-                      navigate("/chat", { state: { reportId: report._id } })
-                    }
-                  >
-                    Ask AI
-                  </button>
+                      <button
+                        className="pg-btn pg-btn-danger-outline pg-btn-sm"
+                        onClick={() => handleDelete(report._id)}
+                      >
+                        Delete
+                      </button>
+                      <button
+                        className="pg-btn pg-btn-outline pg-btn-sm"
+                        type="button" 
+                        onClick={() =>
+                          navigate("/chat", { state: { reportId: report._id } })
+                        }
+                      >
+                        Ask AI
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6">
+                  <div className="pg-empty">No reports found</div>
                 </td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="6" className="text-center">
-                No reports found
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            )}
+          </tbody>
+        </table>
+      </div>
 
       {/* MODAL VIEW */}
       {selectedReport && (
-        <div className="modal show d-block" tabIndex="-1">
+        <div className="modal show d-block" tabIndex="-1" style={{ background: "rgba(11,18,32,0.55)" }}>
           <div className="modal-dialog modal-lg">
-            <div className="modal-content">
-              <div className="modal-header">
+            <div className="modal-content" style={{ borderRadius: "var(--radius-lg)", border: "1px solid var(--border)" }}>
+              <div className="modal-header" style={{ borderBottom: "1px solid var(--border)" }}>
                 <h5 className="modal-title">Clinical Report Details</h5>
 
                 <button
@@ -230,7 +243,7 @@ const Reports = () => {
               </div>
 
               <div className="modal-body">
-                <pre style={{ fontSize: "12px" }}>
+                <pre className="pg-mono" style={{ fontSize: "12px", background: "var(--canvas)", padding: 14, borderRadius: "var(--radius)" }}>
                   {JSON.stringify(selectedReport.full_json, null, 2)}
                 </pre>
               </div>

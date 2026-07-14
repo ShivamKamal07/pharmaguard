@@ -8,8 +8,13 @@ const Analyze = () => {
   const [result, setResult] = useState(null);
 
   return (
-    <div>
-      <h2 className="mb-4">Analyze Patient Genomic Data</h2>
+    <div className="pg-page">
+      <div className="pg-page-header">
+        <div>
+          <span className="pg-eyebrow">Genomics</span>
+          <h2>Analyze Patient Genomic Data</h2>
+        </div>
+      </div>
 
       <UploadForm setResult={setResult} />
 

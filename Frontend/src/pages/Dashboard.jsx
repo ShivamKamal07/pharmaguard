@@ -65,61 +65,68 @@ const low = reports.filter((r) =>
     { name: "Low Risk", value: low },
   ];
 
-  const COLORS = ["#dc3545", "#ffc107", "#28a745"];
+  const COLORS = ["#DC2626", "#D97706", "#16A34A"];
 
   const hasData = high + moderate + low > 0;
 
   if (loading) {
-    return <p>Loading dashboard...</p>;
+    return (
+      <div className="pg-page">
+        <div className="pg-loading-wrap">
+          <span className="pg-spinner" />
+          Loading dashboard...
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div>
-      <h2 className="mb-4">Dashboard Overview</h2>
+    <div className="pg-page">
+      <div className="pg-page-header">
+        <div>
+          <span className="pg-eyebrow">Overview</span>
+          <h2>Dashboard</h2>
+        </div>
+      </div>
 
       {/* STAT CARDS */}
 
-      <div className="row mb-4">
-        <div className="col-md-3">
-          <div className="card shadow-sm p-3 text-center">
-            <h6>Total Analyses</h6>
-            <h3>{reports.length}</h3>
-          </div>
+      <div className="pg-stat-grid">
+        <div className="pg-stat-card">
+          <div className="pg-stat-label">Total Analyses</div>
+          <div className="pg-stat-value">{reports.length}</div>
         </div>
 
-        <div className="col-md-3">
-          <div className="card shadow-sm p-3 text-center">
-            <h6>Safe Cases (Low)</h6>
-            <h3 className="text-success">{low}</h3>
-          </div>
+        <div className="pg-stat-card is-success">
+          <div className="pg-stat-label">Safe Cases (Low)</div>
+          <div className="pg-stat-value is-success">{low}</div>
         </div>
 
-        <div className="col-md-3">
-          <div className="card shadow-sm p-3 text-center">
-            <h6>Toxic Cases (High)</h6>
-            <h3 className="text-danger">{high}</h3>
-          </div>
+        <div className="pg-stat-card is-danger">
+          <div className="pg-stat-label">Toxic Cases (High)</div>
+          <div className="pg-stat-value is-danger">{high}</div>
         </div>
 
-        <div className="col-md-3">
-          <div className="card shadow-sm p-3 text-center">
-            <h6>Avg Confidence</h6>
-            <h3>{avgConfidence}%</h3>
-          </div>
+        <div className="pg-stat-card is-warning">
+          <div className="pg-stat-label">Avg Confidence</div>
+          <div className="pg-stat-value is-warning">{avgConfidence}%</div>
         </div>
       </div>
 
       {/* CHART */}
 
-      <div className="card shadow-sm p-4">
-        <h5 className="mb-3 text-center">Risk Distribution</h5>
+      <div className="pg-card pg-card-pad">
+        <h5 style={{ marginBottom: 16 }}>Risk Distribution</h5>
 
         {!hasData ? (
-          <p className="text-center text-muted">
+          <div className="pg-empty">
+            <div className="pg-empty-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="12" cy="12" r="9" /><path d="M9 12h6M12 9v6" /></svg>
+            </div>
             No analysis data available yet
-          </p>
+          </div>
         ) : (
-          <div style={{ width: "100%", height: 400 }}>
+          <div style={{ width: "100%", height: 380 }}>
             <ResponsiveContainer>
               <PieChart>
                 <Pie
@@ -128,7 +135,7 @@ const low = reports.filter((r) =>
                   nameKey="name"
                   cx="50%"
                   cy="50%"
-                  outerRadius={100}
+                  outerRadius={110}
                   label
                 >
                   {chartData.map((entry, index) => (

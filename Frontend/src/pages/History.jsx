@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { getReports } from "../services/api";
 
+const severityRisk = (level) => {
+  if (level === "High") return "risk-danger";
+  if (level === "Moderate") return "risk-warning";
+  if (level === "Low") return "risk-success";
+  return "risk-secondary";
+};
+
 const History = () => {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,18 +30,37 @@ const History = () => {
   }, []);
 
   if (loading) {
-    return <p>Loading history...</p>;
+    return (
+      <div className="pg-page">
+        <div className="pg-loading-wrap">
+          <span className="pg-spinner" />
+          Loading history...
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div>
-      <h2 className="mb-4">Analysis History</h2>
+    <div className="pg-page">
+      <div className="pg-page-header">
+        <div>
+          <span className="pg-eyebrow">Timeline</span>
+          <h2>Analysis History</h2>
+        </div>
+      </div>
 
       {history.length === 0 ? (
-        <p>No analysis history available.</p>
+        <div className="pg-card">
+          <div className="pg-empty">
+            <div className="pg-empty-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 3" /></svg>
+            </div>
+            No analysis history available.
+          </div>
+        </div>
       ) : (
-        <div className="card shadow-sm p-3">
-          <table className="table table-striped">
+        <div className="pg-table-wrap">
+          <table className="pg-table">
             <thead>
               <tr>
                 <th>S.NO</th>
@@ -55,20 +81,13 @@ const History = () => {
                   </td>
 
                   <td>
-                    <span
-                      className={
-                        item?.risk_assessment?.severity === "High"
-                          ? "text-danger"
-                          : item?.risk_assessment?.severity === "Moderate"
-                          ? "text-warning"
-                          : "text-success"
-                      }
-                    >
+                    <span className={`pg-badge ${severityRisk(item?.risk_assessment?.severity)}`}>
+                      <span className={`pg-signal-dot ${severityRisk(item?.risk_assessment?.severity)}`} />
                       {item?.risk_assessment?.severity || "N/A"}
                     </span>
                   </td>
 
-                  <td>
+                  <td className="pg-mono">
                     {item?.risk_assessment?.confidence_score
                       ? item.risk_assessment.confidence_score + "%"
                       : "N/A"}

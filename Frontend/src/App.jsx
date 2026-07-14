@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Layout from "./components/Layout";
 
+import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
@@ -20,94 +21,113 @@ import ProtectedRoute from "./components/ProtectedRoute";
 const App = () => {
   return (
     <Router>
-      <Layout>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+      <Routes>
+        {/* PUBLIC PAGES - no sidebar/navbar chrome */}
+        <Route path="/" element={<Landing />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
+        {/* PROTECTED PAGES - wrapped in Layout (sidebar + navbar) */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Layout>
                 <Dashboard />
-              </ProtectedRoute>
-            }
-          />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-          <Route
-            path="/doctor-dashboard"
-            element={
-              <ProtectedRoute>
+        <Route
+          path="/doctor-dashboard"
+          element={
+            <ProtectedRoute>
+              <Layout>
                 <DoctorDashboard />
-              </ProtectedRoute>
-            }
-          />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-          <Route
-            path="/analyze"
-            element={
-              <ProtectedRoute>
+        <Route
+          path="/analyze"
+          element={
+            <ProtectedRoute>
+              <Layout>
                 <Analyze />
-              </ProtectedRoute>
-            }
-          />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-          <Route
-            path="/chat"
-            element={
-              <ProtectedRoute>
+        <Route
+          path="/chat"
+          element={
+            <ProtectedRoute>
+              <Layout>
                 <Chat />
-              </ProtectedRoute>
-            }
-          />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-          <Route
-            path="/reports"
-            element={
-              <ProtectedRoute>
+        <Route
+          path="/reports"
+          element={
+            <ProtectedRoute>
+              <Layout>
                 <Reports />
-              </ProtectedRoute>
-            }
-          />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-          <Route
-            path="/history"
-            element={
-              <ProtectedRoute>
+        <Route
+          path="/history"
+          element={
+            <ProtectedRoute>
+              <Layout>
                 <History />
-              </ProtectedRoute>
-            }
-          />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-          <Route
-            path="/settings"
-            element={
-              <ProtectedRoute>
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Layout>
                 <Settings />
-              </ProtectedRoute>
-            }
-          />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-          <Route
-            path="/patients"
-            element={
-              <ProtectedRoute>
+        <Route
+          path="/patients"
+          element={
+            <ProtectedRoute>
+              <Layout>
                 <Patients />
-              </ProtectedRoute>
-            }
-          />
-          
-          <Route
-            path="/patient/:id"
-            element={
-              <ProtectedRoute>
-                <PatientDetails />
-              </ProtectedRoute>
-            }
-          />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-        </Routes>
-      </Layout>
+        <Route
+          path="/patient/:id"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <PatientDetails />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+      </Routes>
     </Router>
   );
 };

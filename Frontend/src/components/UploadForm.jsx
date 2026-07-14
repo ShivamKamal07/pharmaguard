@@ -31,29 +31,41 @@ const UploadForm = ({ setResult }) => {
   };
 
   return (
-    <div className="card p-4 shadow">
-      <h4 className="mb-3">Upload VCF File</h4>
+    <div className="pg-card pg-card-pad">
+      <h4 style={{ marginBottom: 4 }}>Upload VCF File</h4>
+      <p className="pg-subtitle" style={{ marginBottom: 18 }}>
+        Upload a variant call file and target drug to run risk analysis
+      </p>
+
       <form onSubmit={handleSubmit}>
-        <div className="mb-3">
+        <div className="pg-field">
+          <label className="pg-label">VCF File</label>
           <input
             type="file"
-            className="form-control"
+            className="pg-file-input"
             accept=".vcf"
             onChange={(e) => setFile(e.target.files[0])}
           />
+          {file && (
+            <div className="pg-subtitle" style={{ marginTop: 6, fontSize: "0.8rem" }}>
+              Selected: <span className="pg-mono">{file.name}</span>
+            </div>
+          )}
         </div>
 
-        <div className="mb-3">
+        <div className="pg-field">
+          <label className="pg-label">Drug</label>
           <input
             type="text"
-            className="form-control"
+            className="pg-input"
             placeholder="Enter Drug (e.g. WARFARIN)"
             value={drug}
             onChange={(e) => setDrug(e.target.value)}
           />
         </div>
 
-        <button className="btn btn-primary w-100" disabled={loading}>
+        <button className="pg-btn pg-btn-primary pg-btn-block" disabled={loading}>
+          {loading && <span className="pg-spinner" style={{ width: 14, height: 14, borderWidth: 2 }} />}
           {loading ? "Analyzing..." : "Analyze"}
         </button>
       </form>

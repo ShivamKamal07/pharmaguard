@@ -35,102 +35,98 @@ const Register = () => {
 
   return (
 
-    <div style={styles.container}>
+    <div className="pg-auth-shell">
 
-      <div style={styles.card}>
+      <div className="pg-auth-side">
+        <div className="pg-auth-side-brand">
+          <span className="pg-sidebar-brand-mark">PG</span>
+          <div>
+            <div className="pg-sidebar-brand-name">PharmaGuard</div>
+            <div className="pg-sidebar-brand-tag">Risk Intelligence</div>
+          </div>
+        </div>
 
-        <h2>Create Account</h2>
+        <div className="pg-auth-side-quote">
+          Create an account to start analyzing genomic reports and
+          tracking drug-gene interaction risk.
+        </div>
 
-        <form onSubmit={handleRegister}>
+        <div className="pg-auth-side-foot">CLINICAL RISK INTELLIGENCE SYSTEM</div>
+      </div>
 
-          <input
-            style={styles.input}
-            type="text"
-            placeholder="Name"
-            value={name}
-            onChange={(e)=>setName(e.target.value)}
-            required
-          />
+      <div className="pg-auth-form-wrap">
+        <div className="pg-auth-card pg-fade-in">
 
-          <input
-            style={styles.input}
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e)=>setEmail(e.target.value)}
-            required
-          />
+          <h2>Create account</h2>
+          <p className="pg-subtitle">Get started with PharmaGuard</p>
 
-          <input
-            style={styles.input}
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e)=>setPassword(e.target.value)}
-            required
-          />
+          <form onSubmit={handleRegister}>
 
-          <select
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            style={styles.input}
-          >
-            <option value="patient">Patient</option>
-            <option value="doctor">Doctor</option>
-          </select>
+            <div className="pg-field">
+              <label className="pg-label">Name</label>
+              <input
+                className="pg-input"
+                type="text"
+                placeholder="Your full name"
+                value={name}
+                onChange={(e)=>setName(e.target.value)}
+                required
+              />
+            </div>
 
-          <button style={styles.button} type="submit">
-            Register
-          </button>
+            <div className="pg-field">
+              <label className="pg-label">Email</label>
+              <input
+                className="pg-input"
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e)=>setEmail(e.target.value)}
+                required
+              />
+            </div>
 
-        </form>
+            <div className="pg-field">
+              <label className="pg-label">Password</label>
+              <input
+                className="pg-input"
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e)=>setPassword(e.target.value)}
+                required
+              />
+            </div>
 
-        <p>
-          Already have account? <Link to="/login">Login</Link>
-        </p>
+            <div className="pg-field">
+              <label className="pg-label">I am a</label>
+              <select
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                className="pg-select"
+              >
+                <option value="patient">Patient</option>
+                <option value="doctor">Doctor</option>
+              </select>
+            </div>
 
+            <button className="pg-btn pg-btn-primary pg-btn-block" type="submit">
+              Create account
+            </button>
+
+          </form>
+
+          <p className="pg-subtitle" style={{ marginTop: 20 }}>
+            Already have account? <Link to="/login">Login</Link>
+          </p>
+
+        </div>
       </div>
 
     </div>
 
   );
 
-};
-
-const styles = {
-  container:{
-    height:"100vh",
-    display:"flex",
-    justifyContent:"center",
-    alignItems:"center",
-    background:"#f5f6fa"
-  },
-
-  card:{
-    width:"350px",
-    padding:"30px",
-    background:"#fff",
-    borderRadius:"10px",
-    boxShadow:"0 5px 20px rgba(0,0,0,0.1)"
-  },
-
-  input:{
-    width:"100%",
-    padding:"10px",
-    margin:"10px 0",
-    borderRadius:"6px",
-    border:"1px solid #ccc"
-  },
-
-  button:{
-    width:"100%",
-    padding:"10px",
-    background:"#2196F3",
-    color:"white",
-    border:"none",
-    borderRadius:"6px",
-    cursor:"pointer"
-  }
 };
 
 export default Register;

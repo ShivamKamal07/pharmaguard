@@ -2,6 +2,15 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import API from "../services/api";
 
+const severityRisk = (level) => {
+  if (!level) return "risk-secondary";
+  const l = level.toLowerCase();
+  if (l.includes("high") || l.includes("toxic")) return "risk-danger";
+  if (l.includes("moderate")) return "risk-warning";
+  if (l.includes("low")) return "risk-success";
+  return "risk-secondary";
+};
+
 const PatientDetails = () => {
   const { id } = useParams();
   const [reports, setReports] = useState([]);
@@ -23,21 +32,37 @@ const PatientDetails = () => {
   }, [id]);
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>📄 Patient Reports</h2>
+    <div className="pg-page">
+      <div className="pg-page-header">
+        <div>
+          <span className="pg-eyebrow">Patient</span>
+          <h2>Patient Reports</h2>
+        </div>
+      </div>
 
       {reports.length === 0 ? (
-        <p>No reports found</p>
+        <div className="pg-card">
+          <div className="pg-empty">
+            <div className="pg-empty-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M6 2h9l5 5v15H6z" /><path d="M15 2v5h5" /></svg>
+            </div>
+            No reports found
+          </div>
+        </div>
       ) : (
         reports.map((r) => (
-          <div key={r._id} className="card p-3 mb-3 shadow-sm">
-            <h5>{r.fileName}</h5>
+          <div key={r._id} className={`pg-signal-card ${severityRisk(r.riskLevel)} pg-card-pad mb-3`}>
+            <h5 style={{ marginBottom: 8 }}>{r.fileName}</h5>
 
-            <p className="text-muted">
-              Risk Level: <strong>{r.riskLevel}</strong>
+            <p className="pg-subtitle" style={{ marginBottom: 14 }}>
+              Risk Level:{" "}
+              <span className={`pg-badge ${severityRisk(r.riskLevel)}`}>
+                <span className={`pg-signal-dot ${severityRisk(r.riskLevel)}`} />
+                {r.riskLevel}
+              </span>
             </p>
 
-            <button className="btn btn-outline-primary btn-sm">
+            <button className="pg-btn pg-btn-outline pg-btn-sm">
               View Report
             </button>
           </div>

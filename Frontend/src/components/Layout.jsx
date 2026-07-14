@@ -14,12 +14,14 @@ const Layout = ({ children }) => {
 
       <div
         style={{
-          marginLeft: "250px",
-          padding: "20px",
-          marginTop: "60px"
+          marginLeft: "var(--sidebar-w)",
+          marginTop: "var(--navbar-h)",
+          minHeight: "calc(100vh - var(--navbar-h))",
         }}
       >
-        {children}
+        <div className="pg-fade-in">
+          {children}
+        </div>
       </div>
 
     </div>

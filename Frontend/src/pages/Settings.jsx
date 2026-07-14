@@ -33,19 +33,24 @@ const Settings = () => {
   };
 
   return (
-    <div>
-      <h2 className="mb-4">Settings</h2>
+    <div className="pg-page">
+      <div className="pg-page-header">
+        <div>
+          <span className="pg-eyebrow">Account</span>
+          <h2>Settings</h2>
+        </div>
+      </div>
 
       {/* Profile Settings */}
 
-      <div className="card shadow-sm p-4 mb-4">
-        <h5 className="mb-3">Profile</h5>
+      <div className="pg-card pg-card-pad mb-4">
+        <h5 style={{ marginBottom: 18 }}>Profile</h5>
 
-        <div className="mb-3">
-          <label className="form-label">Name</label>
+        <div className="pg-field">
+          <label className="pg-label">Name</label>
           <input
             type="text"
-            className="form-control"
+            className="pg-input"
             name="name"
             value={profile.name}
             onChange={handleProfileChange}
@@ -53,11 +58,11 @@ const Settings = () => {
           />
         </div>
 
-        <div className="mb-3">
-          <label className="form-label">Email</label>
+        <div className="pg-field" style={{ marginBottom: 0 }}>
+          <label className="pg-label">Email</label>
           <input
             type="email"
-            className="form-control"
+            className="pg-input"
             name="email"
             value={profile.email}
             onChange={handleProfileChange}
@@ -68,51 +73,55 @@ const Settings = () => {
 
       {/* App Preferences */}
 
-      <div className="card shadow-sm p-4 mb-4">
-        <h5 className="mb-3">App Preferences</h5>
+      <div className="pg-card pg-card-pad mb-4">
+        <h5 style={{ marginBottom: 18 }}>App Preferences</h5>
 
-        <div className="form-check form-switch mb-3">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            name="darkMode"
-            checked={preferences.darkMode}
-            onChange={handlePreferenceChange}
-          />
-          <label className="form-check-label">Enable Dark Mode</label>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+          <span style={{ fontSize: "0.88rem" }}>Enable Dark Mode</span>
+          <label className="pg-switch">
+            <input
+              type="checkbox"
+              name="darkMode"
+              checked={preferences.darkMode}
+              onChange={handlePreferenceChange}
+            />
+            <span className="pg-switch-track" />
+          </label>
         </div>
 
-        <div className="form-check form-switch">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            name="notifications"
-            checked={preferences.notifications}
-            onChange={handlePreferenceChange}
-          />
-          <label className="form-check-label">
-            Enable Email Notifications
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <span style={{ fontSize: "0.88rem" }}>Enable Email Notifications</span>
+          <label className="pg-switch">
+            <input
+              type="checkbox"
+              name="notifications"
+              checked={preferences.notifications}
+              onChange={handlePreferenceChange}
+            />
+            <span className="pg-switch-track" />
           </label>
         </div>
       </div>
 
       {/* Security */}
 
-      <div className="card shadow-sm p-4 mb-4">
-        <h5 className="mb-3">Security</h5>
+      <div className="pg-card pg-card-pad mb-4">
+        <h5 style={{ marginBottom: 18 }}>Security</h5>
 
-        <button className="btn btn-outline-primary me-2">
-          Change Password
-        </button>
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+          <button className="pg-btn pg-btn-outline">
+            Change Password
+          </button>
 
-        <button className="btn btn-outline-danger">
-          Delete Account
-        </button>
+          <button className="pg-btn pg-btn-danger-outline">
+            Delete Account
+          </button>
+        </div>
       </div>
 
       {/* Save Button */}
 
-      <button className="btn btn-primary" onClick={handleSave}>
+      <button className="pg-btn pg-btn-primary" onClick={handleSave}>
         Save Settings
       </button>
     </div>

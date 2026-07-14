@@ -35,76 +35,68 @@ const Login = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
-        <h2>Login</h2>
+    <div className="pg-auth-shell">
 
-        <form onSubmit={handleLogin}>
-          <input
-            style={styles.input}
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+      <div className="pg-auth-side">
+        <div className="pg-auth-side-brand">
+          <span className="pg-sidebar-brand-mark">PG</span>
+          <div>
+            <div className="pg-sidebar-brand-name">PharmaGuard</div>
+            <div className="pg-sidebar-brand-tag">Risk Intelligence</div>
+          </div>
+        </div>
 
-          <input
-            style={styles.input}
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+        <div className="pg-auth-side-quote">
+          Pharmacogenomic risk analysis, drug-gene interaction insight,
+          and clinical reporting in one workspace.
+        </div>
 
-          <button style={styles.button} type="submit">
-            Login
-          </button>
-        </form>
-
-        <p>
-          Don't have account? <Link to="/register">Register</Link>
-        </p>
+        <div className="pg-auth-side-foot">CLINICAL RISK INTELLIGENCE SYSTEM</div>
       </div>
+
+      <div className="pg-auth-form-wrap">
+        <div className="pg-auth-card pg-fade-in">
+          <h2>Welcome back</h2>
+          <p className="pg-subtitle">Sign in to continue to your dashboard</p>
+
+          <form onSubmit={handleLogin}>
+            <div className="pg-field">
+              <label className="pg-label">Email</label>
+              <input
+                className="pg-input"
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="pg-field">
+              <label className="pg-label">Password</label>
+              <input
+                className="pg-input"
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+
+            <button className="pg-btn pg-btn-primary pg-btn-block" type="submit">
+              Sign in
+            </button>
+          </form>
+
+          <p className="pg-subtitle" style={{ marginTop: 20 }}>
+            Don't have account? <Link to="/register">Register</Link>
+          </p>
+        </div>
+      </div>
+
     </div>
   );
-};
-
-const styles = {
-  container: {
-    height: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    background: "#f5f6fa",
-  },
-
-  card: {
-    width: "350px",
-    padding: "30px",
-    background: "#fff",
-    borderRadius: "10px",
-    boxShadow: "0 5px 20px rgba(0,0,0,0.1)",
-  },
-
-  input: {
-    width: "100%",
-    padding: "10px",
-    margin: "10px 0",
-    borderRadius: "6px",
-    border: "1px solid #ccc",
-  },
-
-  button: {
-    width: "100%",
-    padding: "10px",
-    background: "#4CAF50",
-    color: "white",
-    border: "none",
-    borderRadius: "6px",
-    cursor: "pointer",
-  },
 };
 
 export default Login;

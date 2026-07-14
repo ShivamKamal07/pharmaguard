@@ -14,14 +14,23 @@ const RiskCard = ({ risk }) => {
   const color = getColor(risk.risk_label);
 
   return (
-    <div className={`card mt-4 border-${color} shadow`}>
-      <div className="card-body">
-        <h5>Risk Assessment</h5>
-        <h3 className={`text-${color}`}>
-          {risk.risk_label}
-        </h3>
-        <p><strong>Severity:</strong> {risk.severity}</p>
-        <p><strong>Confidence:</strong> {risk.confidence_score}</p>
+    <div className={`pg-signal-card risk-${color} pg-card-pad mt-4`}>
+      <span className="pg-eyebrow">Risk Assessment</span>
+
+      <h3 style={{ display: "flex", alignItems: "center", marginTop: 6, marginBottom: 14 }}>
+        <span className={`pg-signal-dot risk-${color}`} />
+        {risk.risk_label}
+      </h3>
+
+      <div style={{ display: "flex", gap: 28, flexWrap: "wrap" }}>
+        <div>
+          <div className="pg-stat-label">Severity</div>
+          <div className="pg-mono" style={{ fontWeight: 600 }}>{risk.severity}</div>
+        </div>
+        <div>
+          <div className="pg-stat-label">Confidence</div>
+          <div className="pg-mono" style={{ fontWeight: 600 }}>{risk.confidence_score}</div>
+        </div>
       </div>
     </div>
   );

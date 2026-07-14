@@ -6,7 +6,8 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
-  CartesianGrid
+  CartesianGrid,
+  Cell
 } from "recharts";
 
 const RiskGraph = ({ risk }) => {
@@ -23,20 +24,24 @@ const RiskGraph = ({ risk }) => {
     }
   ];
 
+  const BAR_COLORS = ["#0E7C86", "#16A34A"];
+
   return (
-    <div className="card mt-4 shadow">
-      <div className="card-body">
-        <h5>Risk Analytics Graph</h5>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Bar dataKey="value" />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
+    <div className="pg-card pg-card-pad mt-4">
+      <h5 style={{ marginBottom: 16 }}>Risk Analytics Graph</h5>
+      <ResponsiveContainer width="100%" height={300}>
+        <BarChart data={data}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
+          <XAxis dataKey="name" tick={{ fontSize: 12, fill: "#5B6472" }} />
+          <YAxis tick={{ fontSize: 12, fill: "#5B6472" }} />
+          <Tooltip />
+          <Bar dataKey="value" radius={[6, 6, 0, 0]}>
+            {data.map((entry, index) => (
+              <Cell key={index} fill={BAR_COLORS[index % BAR_COLORS.length]} />
+            ))}
+          </Bar>
+        </BarChart>
+      </ResponsiveContainer>
     </div>
   );
 };

@@ -45,42 +45,68 @@ const Chat = () => {
   };
 
   return (
-    
-  <div style={{ padding: "20px" }}>
-    <h2>AI Assistant 🤖</h2>
 
-    <div style={{ minHeight: "300px", marginBottom: "20px" }}>
-      {messages.map((msg, i) => (
-        <div key={i} style={{ margin: "10px 0" }}>
-          <strong>{msg.type === "user" ? "You" : "AI"}:</strong> {msg.text}
+    <div className="pg-page">
+      <div className="pg-page-header">
+        <div>
+          <span className="pg-eyebrow">Assistant</span>
+          <h2>AI Assistant</h2>
+          {reportId && (
+            <p className="pg-subtitle">Chatting about selected report</p>
+          )}
         </div>
-      ))}
+      </div>
 
-      {/* Typing */}
-      {loading && (
-        <div style={{ margin: "10px 0", color: "gray" }}>
-          🤖 AI is typing...
+      <div className="pg-card pg-card-pad">
+        <div className="pg-chat-shell">
+          <div className="pg-chat-messages">
+            {messages.length === 0 && !loading && (
+              <div className="pg-empty">
+                <div className="pg-empty-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5H4l1.6-4.1A8.4 8.4 0 0 1 4 11.5 8.5 8.5 0 0 1 12.5 3 8.5 8.5 0 0 1 21 11.5Z" /></svg>
+                </div>
+                Ask a question to get started
+              </div>
+            )}
+
+            {messages.map((msg, i) => (
+              <div
+                key={i}
+                className={`pg-chat-bubble-row ${msg.type === "user" ? "is-user" : "is-bot"}`}
+              >
+                <div className={`pg-chat-bubble ${msg.type === "user" ? "is-user" : "is-bot"}`}>
+                  <span className="pg-chat-bubble-label">
+                    {msg.type === "user" ? "You" : "AI"}
+                  </span>
+                  {msg.text}
+                </div>
+              </div>
+            ))}
+
+            {/* Typing */}
+            {loading && (
+              <div className="pg-chat-typing">
+                <span className="pg-spinner" style={{ width: 14, height: 14, borderWidth: 2 }} />
+                AI is typing...
+              </div>
+            )}
+          </div>
+
+          <div className="pg-chat-input-row">
+            <input
+              className="pg-input"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Ask about your report..."
+            />
+
+            <button className="pg-btn pg-btn-primary" onClick={handleSend} disabled={loading}>
+              {loading ? "Thinking..." : "Send"}
+            </button>
+          </div>
         </div>
-      )}
+      </div>
     </div>
-
-    {/* ✅ THIS LINE IS NOW SAFE */}
-    {reportId && (
-      <p style={{ marginBottom: "10px" }}>
-        💊 Chatting about selected report
-      </p>
-    )}
-
-    <input
-      value={input}
-      onChange={(e) => setInput(e.target.value)}
-      placeholder="Ask about your report..."
-    />
-
-    <button onClick={handleSend} disabled={loading}>
-      {loading ? "Thinking..." : "Send"}
-    </button>
-  </div>
 );
 };
 

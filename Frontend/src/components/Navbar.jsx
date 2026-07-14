@@ -8,6 +8,15 @@ const Navbar = () => {
 
   const user = JSON.parse(localStorage.getItem("user"));
 
+  const initials = user?.name
+    ? user.name
+        .split(" ")
+        .map((n) => n[0])
+        .slice(0, 2)
+        .join("")
+        .toUpperCase()
+    : "?";
+
   const handleLogout = () => {
 
     logout();
@@ -19,19 +28,25 @@ const Navbar = () => {
 
   return (
 
-    <div
-      className="d-flex justify-content-between align-items-center p-3 border-bottom"
-      style={{ marginLeft: "250px", background: "#f8f9fa" }}
-    >
+    <div className="pg-navbar">
 
-      <h5 className="mb-0">Clinical Risk Intelligence System</h5>
+      <div className="pg-navbar-title">
+        <span>PharmaGuard</span>
+        Clinical Risk Intelligence System
+      </div>
 
-      <div className="d-flex align-items-center gap-3">
+      <div className="pg-navbar-right">
 
-        <span>Welcome, {user?.name}</span>
+        <div className="pg-navbar-user">
+          <div className="pg-avatar">{initials}</div>
+          <div>
+            <div className="pg-navbar-user-name">{user?.name || "Guest"}</div>
+            <div className="pg-navbar-user-role">{user?.role || ""}</div>
+          </div>
+        </div>
 
         <button
-          className="btn btn-outline-primary btn-sm"
+          className="pg-btn pg-btn-ghost pg-btn-sm"
           onClick={handleLogout}
         >
           Logout
